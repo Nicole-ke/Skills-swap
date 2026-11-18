@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import SearchBar from "./components/searchBar";
-import { mockUsers } from "./mockData";
+
 import { BASE_URL } from "./utils/utils";
 
 function App() {
@@ -14,26 +14,46 @@ function App() {
   }, []);
 
   const results = users.filter(
-    (
-      u, // used to filter the mockusers array every time the component changes
-    ) =>
-      [u.name, u.location, ...(u.offers ?? []), ...(u.wants ?? [])] //does she have a name..yes....loction...yes...wants (if she doesnt it remains emptyand also offers)
+    (u) =>
+      [u.name, u.location, ...(u.offers ?? []), ...(u.wants ?? [])]
         .join(" ")
         .toLowerCase()
-        .includes(query.trim().toLowerCase()), //to prevent submission of blank spaces
+        .includes(query.trim().toLowerCase()),
   );
+
   return (
-    <div style={{ padding: 24 }}>
-      <SearchBar value={query} onChange={setQuery} />
-      <p>{results.length} people found</p>
-      <ul>
-        {results.map((u) => (
-          <li key={u.id}>
-            {u.name}: {u.offers.join(", ")}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <main className="min-h-screen bg-slate-100 px-4 py-8">
+      <div className="mx-auto max-w-xl">
+        <h1 className="mb-5 text-3xl font-bold text-slate-900">Skills Swap</h1>
+        <SearchBar value={query} onChange={setQuery} />
+
+        {query.trim().length > 0 && (
+          <section className="mt-5 rounded-3xl border border-slate-200 bg-white p-4 shadow-lg">
+            <div className="mb-3 px-1 text-sm font-medium text-slate-500">
+              {results.length} {results.length === 1 ? "person" : "people"} found
+            </div>
+
+            <ul className="space-y-3">
+              {results.map((u) => (
+                <li
+                  key={u.id}
+                  className="cursor-pointer rounded-2xl border border-indigo-100 bg-gradient-to-r from-indigo-50 to-amber-50 p-4 transition hover:-translate-y-0.5 hover:border-indigo-300 hover:shadow-md"
+                >
+                  <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+                    <span className="font-bold text-slate-900">{u.name}</span>
+                    <span className="text-sm font-medium text-indigo-700">
+                      {u.offers.join(", ")}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-sm text-slate-600">{u.location}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </div>
+    </main>
   );
 }
+
 export default App;
