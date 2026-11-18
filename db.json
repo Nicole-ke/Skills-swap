@@ -1,0 +1,159 @@
+{
+  "people": [
+    {
+      "id": "1",
+      "name": "Wanjiru",
+      "photo": "https://i.pravatar.cc/400?img=5",
+      "skillOffered": "Baking",
+      "timeToLearn": "2 weeks",
+      "skillWanted": "Graphic design",
+      "phone": "254712345678"
+    },
+    {
+      "id": "2",
+      "name": "Otieno",
+      "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dd/Uhuru_Kenyatta.jpg/960px-Uhuru_Kenyatta.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "skillOffered": "Guitar",
+      "timeToLearn": "1 month",
+      "skillWanted": "Baking",
+      "phone": "254722345678"
+    },
+    {
+      "id": "3",
+      "name": "Achieng",
+      "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d3/Raila_Odinga_2009_%28cropped%29.jpg/960px-Raila_Odinga_2009_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20180603095325",
+      "skillOffered": "Graphic design",
+      "timeToLearn": "3 weeks",
+      "skillWanted": "Swimming",
+      "phone": "254733345678"
+    },
+    {
+      "id": "4",
+      "name": "Kamau",
+      "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/01/Sifuna_in_2024.jpg/960px-Sifuna_in_2024.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "skillOffered": "Photography",
+      "timeToLearn": "2 weeks",
+      "skillWanted": "Guitar",
+      "phone": "254744345678"
+    },
+    {
+      "id": "5",
+      "name": "Njeri",
+      "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2e/Martha_Karua_%28cropped_2%29.jpg/960px-Martha_Karua_%28cropped_2%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "skillOffered": "Hair braiding",
+      "timeToLearn": "1 week",
+      "skillWanted": "Coding",
+      "phone": "254755345678"
+    },
+    {
+      "id": "6",
+      "name": "Mutua",
+      "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b7/Mwai_Kibaki_2011-07-08.jpg/960px-Mwai_Kibaki_2011-07-08.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "skillOffered": "Coding",
+      "timeToLearn": "2 months",
+      "skillWanted": "Photography",
+      "phone": "254766345678"
+    },
+    {
+      "id": "7",
+      "name": "Akinyi",
+      "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/da/Wangari_Maathai_in_2001.jpg/960px-Wangari_Maathai_in_2001.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "skillOffered": "Swimming",
+      "timeToLearn": "3 weeks",
+      "skillWanted": "Hair braiding",
+      "phone": "254777345678"
+    },
+    {
+      "id": "8",
+      "name": "Kiprop",
+      "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9a/Daniel_arap_Moi_1979b.jpg/960px-Daniel_arap_Moi_1979b.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "skillOffered": "Marathon training",
+      "timeToLearn": "1 month",
+      "skillWanted": "Cooking",
+      "phone": "254788345678"
+    },
+    {
+      "id": "9",
+      "name": "Mkuru",
+      "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/Abel_Mutua%2C_May_2021.png/960px-Abel_Mutua%2C_May_2021.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "skillOffered": "Cooking",
+      "timeToLearn": "2 weeks",
+      "skillWanted": "Marathon training",
+      "phone": "254799345678"
+    }
+  ],
+  "matches": [
+    {
+      "id": "ff0s0D_0eIs",
+      "name": "Mutua",
+      "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/Pope_Francis_Korea_Haemi_Castle_19.jpg/960px-Pope_Francis_Korea_Haemi_Castle_19.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "skillOffered": "Coding",
+      "timeToLearn": "2 months",
+      "skillWanted": "Photography",
+      "phone": "254766345678",
+      "personId": "6"
+    },
+    {
+      "id": "A1am2HAFfhI",
+      "name": "Otieno",
+      "photo": "https://i.pravatar.cc/400?img=12",
+      "skillOffered": "Guitar",
+      "timeToLearn": "1 month",
+      "skillWanted": "Baking",
+      "phone": "254722345678",
+      "personId": "2"
+    },
+    {
+      "id": "heu2KAJRdYw",
+      "name": "Njeri",
+      "photo": "https://i.pravatar.cc/400?img=20",
+      "skillOffered": "Hair braiding",
+      "timeToLearn": "1 week",
+      "skillWanted": "Coding",
+      "phone": "254755345678",
+      "personId": "5"
+    },
+    {
+      "id": "LzL8TAWDGUU",
+      "name": "Kiprop",
+      "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9a/Daniel_arap_Moi_1979b.jpg/960px-Daniel_arap_Moi_1979b.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "skillOffered": "Marathon training",
+      "timeToLearn": "1 month",
+      "skillWanted": "Cooking",
+      "phone": "254788345678",
+      "personId": "8"
+    },
+    {
+      "id": "I5wWC6QfiiE",
+      "name": "Wanjiru",
+      "photo": "https://i.pravatar.cc/400?img=5",
+      "skillOffered": "Baking",
+      "timeToLearn": "2 weeks",
+      "skillWanted": "Graphic design",
+      "phone": "254712345678",
+      "personId": "1"
+    },
+    {
+      "id": "u29QV959CI0",
+      "name": "Akinyi",
+      "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/da/Wangari_Maathai_in_2001.jpg/960px-Wangari_Maathai_in_2001.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "skillOffered": "Swimming",
+      "timeToLearn": "3 weeks",
+      "skillWanted": "Hair braiding",
+      "phone": "254777345678",
+      "personId": "7"
+    },
+    {
+      "id": "yX8foQ_jlk8",
+      "name": "Achieng",
+      "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d3/Raila_Odinga_2009_%28cropped%29.jpg/960px-Raila_Odinga_2009_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20180603095325",
+      "skillOffered": "Graphic design",
+      "timeToLearn": "3 weeks",
+      "skillWanted": "Swimming",
+      "phone": "254733345678",
+      "personId": "3"
+    }
+  ],
+  "users": [],
+  "$schema": "./node_modules/json-server/schema.json"
+}
