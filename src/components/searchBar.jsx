@@ -17,7 +17,7 @@ export default function SearchBar({ value, onChange }) {
   }
 
   return (
-    <div className="search-bar">
+    <div className="relative w-full max-w-md bg-gray-50">
       <input
         type="text"
         value={text}
