@@ -1,39 +1,36 @@
-import { useEffect, useState } from "react";
-import SearchBar from "./components/searchBar";
-import { mockUsers } from "./mockData";
-import { BASE_URL } from "./utils/utils";
+
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import Matches from "./pages/Matches";
+import Profile from "./pages/Profile";
+import SavedMatches from "./pages/SavedMatches";
 
 function App() {
-  const [users, setUsers] = useState([]);
-  const [query, setQuery] = useState("");
-
-  useEffect(() => {
-    fetch(`${BASE_URL}/users`)
-      .then((res) => res.json())
-      .then((data) => setUsers(data));
-  }, []);
-
-  const results = users.filter(
-    (
-      u, // used to filter the mockusers array every time the component changes
-    ) =>
-      [u.name, u.location, ...(u.offers ?? []), ...(u.wants ?? [])] //does she have a name..yes....loction...yes...wants (if she doesnt it remains emptyand also offers)
-        .join(" ")
-        .toLowerCase()
-        .includes(query.trim().toLowerCase()), //to prevent submission of blank spaces
-  );
   return (
-    <div style={{ padding: 24 }}>
-      <SearchBar value={query} onChange={setQuery} />
-      <p>{results.length} people found</p>
-      <ul>
-        {results.map((u) => (
-          <li key={u.id}>
-            {u.name}: {u.offers.join(", ")}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <BrowserRouter>
+      <div className="min-h-screen bg-gray-50">
+        <nav className="flex items-center justify-between bg-white px-6 py-4 shadow-sm">
+          <Link to="/" className="text-2xl font-bold text-purple-700">
+            SkillSwap
+          </Link>
+
+          <div className="flex gap-5 font-medium text-gray-700">
+            <Link to="/" className="hover:text-purple-600">
+              Matches
+            </Link>
+            <Link to="/saved" className="hover:text-purple-600">
+              ♥ Saved
+            </Link>
+          </div>
+        </nav>
+
+        <Routes>
+          <Route path="/" element={<Matches />} />
+          <Route path="/saved" element={<SavedMatches />} />
+          <Route path="/profile/:id" element={<Profile />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
+
 export default App;
