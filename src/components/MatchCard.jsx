@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 
 function MatchCard({
@@ -16,6 +15,8 @@ function MatchCard({
   amount = "To be agreed",
   isSaved = false,
   onToggleSave,
+  phone,
+  showWhatsApp = false,
 }) {
   const message = `Hello ${name}, I found your profile on SkillSwap and would like to exchange skills.`;
 
@@ -86,14 +87,16 @@ function MatchCard({
           View Profile
         </Link>
 
-        <a
-          href={`https://wa.me/?text=${encodeURIComponent(message)}`}
-          target="_blank"
-          rel="noreferrer"
-          className="flex-1 rounded-xl bg-green-600 py-3 text-center font-semibold text-white hover:bg-green-700"
-        >
-          WhatsApp
-        </a>
+        {showWhatsApp && phone && (
+          <a
+            href={`https://wa.me/${phone}?text=${encodeURIComponent(message)}`}
+            target="_blank"
+            rel="noreferrer"
+            className="flex-1 rounded-xl bg-green-600 py-3 text-center font-semibold text-white hover:bg-green-700"
+          >
+            WhatsApp
+          </a>
+        )}
       </div>
 
       <button
