@@ -25,6 +25,9 @@ function App() {
             <Link to="/skills" className="hover:text-purple-600">
               Add your skills
             </Link>
+            <Link to="/login" className="hover:text-purple-600">
+              Login
+            </Link>
           </div>
         </nav>
 
@@ -32,6 +35,7 @@ function App() {
           <Route path="/" element={<Matches />} />
           <Route path="/saved" element={<SavedMatches />} />
           <Route path="/skills" element={<SkillForm />} />
+          <Route path="/login" element={<LoginForm />} />
           <Route path="/profile/:id" element={<Profile />} />
         </Routes>
       </div>
