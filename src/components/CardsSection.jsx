@@ -3,6 +3,8 @@ import SkillCard from "./SkillCard"
 import SwipeDeck from "./SwipeDeck"
 import PersonDetails from "./PersonDetails"
 
+import DiscoverSearch from "./DiscoverSearch";
+
 const API = "http://localhost:3000"
 
 function CardsSection({ search = "" }) {
@@ -29,6 +31,8 @@ function CardsSection({ search = "" }) {
     const offered = Array.isArray(p.offers) ? p.offers.join(" ") : (p.Offered ?? "")
     return offered.toLowerCase().includes((search ?? "").toLowerCase())
   })
+
+    const allSkills = [...new Set(people.flatMap((p) => p.offers || []))]
 
   const isMatched = (person) => matches.some((m) => m.personId === person.id)
 
@@ -61,6 +65,8 @@ function CardsSection({ search = "" }) {
       {/* DISCOVER GRID */}
       {view === "home" && (
         <div>
+          <DiscoverSearch skills={allSkills} />
+          
           <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
             <h1 className="text-3xl font-bold text-gray-800">Discover </h1>
             <div className="flex items-center gap-3">
