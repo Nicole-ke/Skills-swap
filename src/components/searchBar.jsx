@@ -28,9 +28,8 @@ export default function SearchBar({ value = "", onChange }) {
   }
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full max-w-md bg-gray-50">
       <input
-        className="h-12 w-full rounded-full border border-indigo-200 bg-white px-5 pr-20 text-base text-slate-900 shadow-md outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
         type="text"
         value={text}
         onChange={(event) => setText(event.target.value)}
@@ -38,12 +37,7 @@ export default function SearchBar({ value = "", onChange }) {
         aria-label="Search skills"
       />
       {text.length > 0 ? (
-        <button
-          type="button"
-          onClick={handleClear}
-          aria-label="Clear search"
-          className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full px-3 py-1.5 text-sm font-semibold text-indigo-700 hover:bg-indigo-50"
-        >
+        <button type="button" onClick={handleClear} aria-label="Clear search">
           Clear
         </button>
       ) : null}
