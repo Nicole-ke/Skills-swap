@@ -5,10 +5,11 @@ import Profile from "./pages/Profile";
 import SavedMatches from "./pages/SavedMatches";
 import SkillForm from "./pages/SkillForm";
 import LoginForm from "./pages/LoginForm";
-import Search from "./pages/Search";
 import { useState } from "react";
 import CardsSection from "./components/CardsSection";
 import Logo from "./components/Logo";
+
+import Search from "./pages/searchBar";
 
 function App() {
   const [search, setSearch] = useState("");
