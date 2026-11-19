@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import SearchBar from "./components/searchBar";
+import FilterChips from "./components/FilterChips";
+
 
 import { BASE_URL } from "./utils/utils";
 const CATEGORIES = ["All", "Design", "Coding", "Music", "Languages"];
@@ -14,19 +16,25 @@ const CATEGORY_KEYWORDS = {
 function App() {
   const [users, setUsers] = useState([]);
   const [query, setQuery] = useState("");
-  const [category, setCategory] = useState("All");//stores the current filter chip
+  const [category, setCategory] = useState("All"); //stores the current filter chip
 
   useEffect(() => {
-    fetch(`${BASE_URL}/users`)
-      .then((res) => res.json())
-      .then((data) => setUsers(data));
+   fetch(`${BASE_URL}/users`)
+    .then((res) => {
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    })
+    .then((data) => {
+      console.log("users loaded:", data);
+      setUsers(data);
+    })
+    .catch((err) => console.error("Fetch failed:", err));
   }, []);
 
   const results = users.filter((u) => {
     const text = [u.name, u.location, ...(u.offers ?? []), ...(u.wants ?? [])]
       .join(" ")
       .toLowerCase();
-
 
     const matchesQuery = text.includes(query.trim().toLowerCase());
     const keywords = CATEGORY_KEYWORDS[category];
