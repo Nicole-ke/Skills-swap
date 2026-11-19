@@ -22,7 +22,6 @@ function MatchCard({
   return (
     <div className="flex h-full min-h-[520px] flex-col rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
 
-      {/* Profile heading */}
       <div className="flex items-center gap-4">
         <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-purple-100 text-lg font-bold text-purple-700">
           {initials}
@@ -41,37 +40,28 @@ function MatchCard({
         </div>
       </div>
 
-      {/* Skills they teach */}
       <div className="mt-5">
         <h3 className="mb-2 font-semibold">Skills they can teach</h3>
         <div className="flex flex-wrap gap-2">
           {canTeach.map((skill) => (
-            <span
-              key={skill}
-              className="rounded-full bg-green-100 px-3 py-1 text-sm text-green-700"
-            >
+            <span key={skill} className="rounded-full bg-green-100 px-3 py-1 text-sm text-green-700">
               {skill}
             </span>
           ))}
         </div>
       </div>
 
-      {/* Skills they want */}
       <div className="mt-5">
         <h3 className="mb-2 font-semibold">Skills they want to learn</h3>
         <div className="flex flex-wrap gap-2">
           {wantsToLearn.map((skill) => (
-            <span
-              key={skill}
-              className="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-700"
-            >
+            <span key={skill} className="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-700">
               {skill}
             </span>
           ))}
         </div>
       </div>
 
-      {/* Shared matches */}
       <div className="mt-5">
         {matchedSkills.length > 0 && (
           <div className="rounded-xl bg-purple-50 p-4">
@@ -96,7 +86,6 @@ function MatchCard({
         )}
       </div>
 
-      {/* Push actions to the bottom */}
       <div className="mt-auto pt-5">
         <div className="flex justify-between text-sm text-gray-600">
           <span>Duration: {duration}</span>
