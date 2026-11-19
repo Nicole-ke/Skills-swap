@@ -20,15 +20,12 @@ const initialErrors = { name: '', email: '', location: '', phone: '', skill: '' 
 export default function UserForm() {
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState(initialErrors);
-  const [submitted, setSubmitted] = useState(null);
-  const [requestError, setRequestError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: '' }));
-    setRequestError('');
   };
 
   const validate = () => {
@@ -74,8 +71,6 @@ export default function UserForm() {
     e.preventDefault();
     if (!validate()) return;
 
-    setRequestError('');
-    setSubmitted(null);
     setIsSubmitting(true);
 
     try {
@@ -85,13 +80,17 @@ export default function UserForm() {
       }
 
       const users = await usersResponse.json();
+      if (!Array.isArray(users)) {
+        throw new Error('The database returned an unexpected response.');
+      }
+
       const email = form.email.trim().toLowerCase();
       const emailExists = users.some(
         (user) => user.email?.trim().toLowerCase() === email
       );
 
       if (emailExists) {
-        setRequestError('An account with this email already exists. Sign in instead.');
+        console.warn('Sign-up failed: a profile already exists for that email.');
         return;
       }
 
@@ -113,10 +112,10 @@ export default function UserForm() {
         throw new Error('Could not save your profile. Please try again.');
       }
 
-      setSubmitted(form);
+      console.info('Profile saved successfully.');
       setForm(initialForm);
     } catch (error) {
-      setRequestError(
+      console.error(
         error instanceof TypeError
           ? `Could not connect to the database at ${BASE_URL}. Start it with npm run server and try again.`
           : error.message
@@ -129,8 +128,6 @@ export default function UserForm() {
   const handleReset = () => {
     setForm(initialForm);
     setErrors(initialErrors);
-    setSubmitted(null);
-    setRequestError('');
   };
 
   return (
@@ -327,29 +324,6 @@ export default function UserForm() {
               </button>
             </div>
           </form>
-
-          {requestError && (
-            <p className="mt-5 rounded-lg bg-red-50 p-4 text-sm text-red-700" role="alert">
-              {requestError}{' '}
-              {requestError.includes('Sign in') && (
-                <Link to="/login" className="font-semibold underline">
-                  Sign in
-                </Link>
-              )}
-            </p>
-          )}
-
-          {submitted && (
-            <div
-              className="mt-6 rounded-lg bg-green-50 p-4 text-sm text-green-800"
-              role="status"
-            >
-              <strong>Thanks, {submitted.name}!</strong>
-              <p className="mt-1">
-                Your profile was saved to the database with {submitted.skill} as an offered skill.
-              </p>
-            </div>
-          )}
 
           <p className="mt-6 text-center text-sm text-gray-600">
             Already have a profile?{' '}

@@ -4,6 +4,7 @@ import Profile from "./pages/Profile";
 import SavedMatches from "./pages/SavedMatches";
 import SkillForm from "./pages/SkillForm";
 import LoginForm from "./pages/LoginForm";
+import Search from "./pages/Search";
 
 function App() {
   return (
