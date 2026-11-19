@@ -5,9 +5,10 @@ import Profile from "./pages/Profile";
 import SavedMatches from "./pages/SavedMatches";
 import SkillForm from "./pages/SkillForm";
 import LoginForm from "./pages/LoginForm";
-
+import Search from "./pages/Search";
 import { useState } from "react";
 import CardsSection from "./components/CardsSection";
+import Logo from "./components/Logo";
 
 function App() {
   const [search, setSearch] = useState("");
@@ -15,8 +16,8 @@ function App() {
     <BrowserRouter>
       <div className="min-h-screen bg-gray-50">
         <nav className="flex items-center justify-between bg-white px-6 py-4 shadow-sm">
-          <Link to="/" className="text-2xl font-bold text-purple-700">
-            SkillSwap
+          <Link to="/"> 
+          <Logo />  
           </Link>
 
           <div className="flex gap-5 font-medium text-gray-700">

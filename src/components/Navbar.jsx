@@ -1,17 +1,23 @@
 import { useState } from "react";
-import { NavLink,useNavigate,useSearchParams } from "react-router-dom";
+import { NavLink,useLocation,useNavigate,useSearchParams } from "react-router-dom";
 import SearchBar from "./searchBar";
+import Logo from "./Logo";
 
 const LINKS = [
+  
+{ to: "/discover", label: "Discover" },
   { to: "/", label: "Matches", end: true },
   { to: "/search", label: "Search" },
   { to: "/saved", label: "♥ Saved" },
-];
+  { to: "/skills", label: "Add your skills" },
+  { to: "/login", label: "Login" },
+]
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const [params] = useSearchParams();
+  const {pathname} = useLocation();
 
   const linkClass = ({ isActive }) =>
     `rounded-md px-3 py-2 text-sm font-medium transition ${
@@ -19,6 +25,17 @@ export default function Navbar() {
         ? "bg-purple-100 text-purple-700"
         : "text-gray-700 hover:bg-gray-100 hover:text-purple-600"
     }`;
+
+    function handleSearch(event) {
+        //stays on discover if we are there .otherwise go to search
+        const target = pathname === "/discover" ? "/discover" : "/search";//decides which page to send to pathname(?)if else
+           // What the user typed, made safe for a URL
+    const text = encodeURIComponent(event.target.value);
+    // Go to e.g. /search?q=guitar
+    navigate(`${page}?q=${text}`);
+  }
+                      //page shown above,query string,      
+    }
 
   return (
     <nav className="border-b border-gray-200 bg-white">
