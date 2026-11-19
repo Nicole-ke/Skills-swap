@@ -7,6 +7,7 @@ import SkillForm from "./pages/SkillForm";
 import LoginForm from "./pages/LoginForm";
 import { useState } from "react";
 import CardsSection from "./components/CardsSection";
+import Logo from "./components/Logo";
 
 import Search from "./pages/Search";
 
@@ -16,8 +17,8 @@ function App() {
     <BrowserRouter>
       <div className="min-h-screen bg-gray-50">
         <nav className="flex items-center justify-between bg-white px-6 py-4 shadow-sm">
-          <Link to="/" className="text-2xl font-bold text-purple-700">
-            SkillSwap
+          <Link to="/"> 
+          <Logo />  
           </Link>
 
           <div className="flex gap-5 font-medium text-gray-700">
@@ -28,7 +29,7 @@ function App() {
               Matches
             </Link>
             <Link to="/saved" className="hover:text-purple-600">
-              ♥ Saved
+              Saved
             </Link>
             <Link to="/skills" className="hover:text-purple-600">
               Add your skills

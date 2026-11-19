@@ -25,9 +25,10 @@ function CardsSection({ search = "" }) {
       .then((data) => setMatches(data))
   }, [])
 
-  const results = people.filter((p) =>
-    p.offers.some((skill) => skill.toLowerCase().includes(search.toLowerCase()))
-  )
+  const results = people.filter((p) => {
+    const offered = Array.isArray(p.offers) ? p.offers.join(" ") : (p.Offered ?? "")
+    return offered.toLowerCase().includes((search ?? "").toLowerCase())
+  })
 
   const isMatched = (person) => matches.some((m) => m.personId === person.id)
 

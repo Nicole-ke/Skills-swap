@@ -1,9 +1,20 @@
 import { useEffect, useState } from "react";
 
-export default function SearchBar({ value, onChange }) {
+export default function SearchBar({ value = "", onChange }) {
   const [text, setText] = useState(value ?? "");
+  const onChangeRef = useref(onChange);
+  const firstRun = useRef(true);
+
+   useEffect(() => {
+    onChangeRef.current = onChange;
+  });
+
 
   useEffect(() => {
+     if (firstRun.current) {
+      firstRun.current = false;
+      return;
+    }
     const timer = setTimeout(() => {
       onChange(text);
     }, 300);
