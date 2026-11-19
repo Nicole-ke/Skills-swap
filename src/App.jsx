@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Matches from "./pages/Matches";
 import Profile from "./pages/Profile";
 import SavedMatches from "./pages/SavedMatches";
+import SkillForm from "./pages/SkillForm";
+import LoginForm from "./pages/LoginForm";
 
 function App() {
   return (
@@ -20,12 +22,16 @@ function App() {
             <Link to="/saved" className="hover:text-purple-600">
               ♥ Saved
             </Link>
+            <Link to="/skills" className="hover:text-purple-600">
+              Add your skills
+            </Link>
           </div>
         </nav>
 
         <Routes>
           <Route path="/" element={<Matches />} />
           <Route path="/saved" element={<SavedMatches />} />
+          <Route path="/skills" element={<SkillForm />} />
           <Route path="/profile/:id" element={<Profile />} />
         </Routes>
       </div>
