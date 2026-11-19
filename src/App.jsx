@@ -19,7 +19,7 @@ function App() {
               Matches
             </Link>
             <Link to="/saved" className="hover:text-purple-600">
-              ♥ Saved
+              Saved
             </Link>
             <Link to="/search" className="hover:text-purple-600">
               Search
