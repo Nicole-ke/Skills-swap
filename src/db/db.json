@@ -1,3 +1,4 @@
+
 {
   "users": [
     {
@@ -33,7 +34,7 @@
       "location": "Nakuru",
       "bio": "Developer who wants to finally learn guitar.",
       "offers": ["Python", "React"],
-      "wants": ["Guitar", "Cooking"],
+      "wants": ["Graphic design", "Cooking"],
       "email": "kevin@example.com"
     },
     {

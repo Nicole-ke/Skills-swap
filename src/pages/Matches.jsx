@@ -2,9 +2,73 @@
 import { useEffect, useState } from "react";
 import MatchCard from "../components/MatchCard";
 
+// Remove duplicate skills and ignore differences in capital letters.
+function uniqueSkills(skills = []) {
+  const seen = new Set();
+
+  return skills.filter((skill) => {
+    const normalized = skill.trim().toLowerCase();
+
+    if (!normalized || seen.has(normalized)) {
+      return false;
+    }
+
+    seen.add(normalized);
+    return true;
+  });
+}
+
+// Find skills one person wants that the other person offers.
+function findMatchingSkills(wantedSkills = [], offeredSkills = []) {
+  const offered = new Set(
+    uniqueSkills(offeredSkills).map((skill) => skill.toLowerCase())
+  );
+
+  return uniqueSkills(wantedSkills).filter((skill) =>
+    offered.has(skill.toLowerCase())
+  );
+}
+
+// Calculate compatibility from actual skill exchanges.
+function calculateCompatibility(currentUser, otherUser) {
+  const skillsTheyCanTeach = findMatchingSkills(
+    currentUser.wants || [],
+    otherUser.offers || []
+  );
+
+  const skillsYouCanTeach = findMatchingSkills(
+    otherUser.wants || [],
+    currentUser.offers || []
+  );
+
+  const totalSkills =
+    uniqueSkills(currentUser.wants || []).length +
+    uniqueSkills(otherUser.wants || []).length;
+
+  const successfulExchanges =
+    skillsTheyCanTeach.length + skillsYouCanTeach.length;
+
+  const matchPercentage =
+    totalSkills > 0
+      ? Math.round((successfulExchanges / totalSkills) * 100)
+      : 0;
+
+  return {
+    skillsTheyCanTeach,
+    skillsYouCanTeach,
+    matchedSkills: [
+      ...skillsTheyCanTeach,
+      ...skillsYouCanTeach,
+    ],
+    matchPercentage,
+  };
+}
+
 function getSavedIds() {
   try {
-    return JSON.parse(localStorage.getItem("skillswap_saved_users") || "[]");
+    return JSON.parse(
+      localStorage.getItem("skillswap_saved_users") || "[]"
+    );
   } catch {
     return [];
   }
@@ -20,7 +84,10 @@ function Matches() {
   useEffect(() => {
     fetch("http://localhost:3000/users")
       .then((response) => {
-        if (!response.ok) throw new Error("Failed to fetch users");
+        if (!response.ok) {
+          throw new Error("Failed to fetch users");
+        }
+
         return response.json();
       })
       .then(setUsers)
@@ -36,53 +103,35 @@ function Matches() {
         ? currentIds.filter((savedId) => savedId !== idString)
         : [...currentIds, idString];
 
-      localStorage.setItem("skillswap_saved_users", JSON.stringify(updatedIds));
+      localStorage.setItem(
+        "skillswap_saved_users",
+        JSON.stringify(updatedIds)
+      );
+
       return updatedIds;
     });
   }
 
-  const demoUser = users.find((user) => Number(user.id) === 1);
+  // User ID 1 is currently the profile used as the demo account.
+  const currentUser = users.find(
+    (user) => Number(user.id) === 1
+  );
 
-  const matchedUsers = users
-    .filter((user) => Number(user.id) !== 1)
-    .map((user) => {
-      const skillsTheyCanTeach = (demoUser?.wants || []).filter((skill) =>
-        (user.offers || []).some(
-          (offer) => offer.toLowerCase() === skill.toLowerCase()
-        )
-      );
+  const matchedUsers = currentUser
+    ? users
+        .filter((user) => Number(user.id) !== Number(currentUser.id))
+        .map((user) => {
+          const compatibility = calculateCompatibility(
+            currentUser,
+            user
+          );
 
-      const skillsYouCanTeach = (user.wants || []).filter((skill) =>
-        (demoUser?.offers || []).some(
-          (offer) => offer.toLowerCase() === skill.toLowerCase()
-        )
-      );
-
-      const matchedSkills = [
-        ...skillsTheyCanTeach,
-        ...skillsYouCanTeach,
-      ];
-
-      const totalSkills =
-        (demoUser?.wants || []).length + (user.wants || []).length;
-
-      const matchPercentage =
-        totalSkills > 0
-          ? Math.round(
-              ((skillsTheyCanTeach.length + skillsYouCanTeach.length) /
-                totalSkills) *
-                100
-            )
-          : 0;
-
-      return {
-        ...user,
-        matchedSkills,
-        skillsTheyCanTeach,
-        skillsYouCanTeach,
-        matchPercentage,
-      };
-    });
+          return {
+            ...user,
+            ...compatibility,
+          };
+        })
+    : [];
 
   const filteredUsers = matchedUsers.filter((user) => {
     const search = searchTerm.toLowerCase();
@@ -101,16 +150,32 @@ function Matches() {
     return searchableText.includes(search);
   });
 
-  if (loading) return <p className="p-6">Loading matches...</p>;
-  if (error) return <p className="p-6 text-red-600">{error}</p>;
-  if (!demoUser) return <p className="p-6">Your user profile could not be found.</p>;
+  if (loading) {
+    return <p className="p-6">Loading matches...</p>;
+  }
+
+  if (error) {
+    return <p className="p-6 text-red-600">{error}</p>;
+  }
+
+  if (!currentUser) {
+    return (
+      <p className="p-6">
+        Your user profile could not be found.
+      </p>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="mx-auto max-w-6xl">
-        <h1 className="text-3xl font-bold text-gray-900">Your Matches</h1>
+        <h1 className="text-3xl font-bold text-gray-900">
+          Your Matches
+        </h1>
+
         <p className="mt-2 text-gray-600">
-          Discover people who can help you learn new skills and learn from you.
+          Discover people who can help you learn new skills
+          and learn from you.
         </p>
 
         <input
@@ -128,7 +193,11 @@ function Matches() {
               id={user.id}
               name={user.name}
               location={user.location}
-              initials={user.name.split(" ").map((word) => word[0]).join("").toUpperCase()}
+              initials={user.name
+                .split(" ")
+                .map((word) => word[0])
+                .join("")
+                .toUpperCase()}
               matchPercentage={user.matchPercentage}
               matchedSkills={user.matchedSkills}
               skillsTheyCanTeach={user.skillsTheyCanTeach}
