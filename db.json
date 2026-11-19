@@ -196,5 +196,25 @@
       "timeToLearn": "1 month",
       "personId": 2
     }
+  ],
+  "requests": [
+    {
+      "fromId": "1",
+      "fromName": "Amina Wanjiru",
+      "toId": "4",
+      "toName": "Kevin Njoroge",
+      "status": "accepted",
+      "createdAt": "2026-11-19T17:01:24.227Z",
+      "id": 1
+    },
+    {
+      "fromId": "7",
+      "fromName": "Njeri Kamau",
+      "toId": "4",
+      "toName": "Kevin Njoroge",
+      "status": "accepted",
+      "createdAt": "2026-11-19T17:07:48.831Z",
+      "id": 2
+    }
   ]
 }
