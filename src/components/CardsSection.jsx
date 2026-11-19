@@ -15,7 +15,7 @@ function CardsSection({ search = "" }) {
 
   // Load people and matches from db.json when the page opens
   useEffect(() => {
-    fetch(`${API}/people`)
+    fetch(`${API}/users`)
       .then((res) => res.json())
       .then((data) => setPeople([...data].sort(() => Math.random() - 0.5))) // shuffle
       .catch(() => setError("Can't reach the database. Is json-server running?"))
@@ -26,7 +26,7 @@ function CardsSection({ search = "" }) {
   }, [])
 
   const results = people.filter((p) =>
-    p.skillOffered.toLowerCase().includes(search.toLowerCase())
+    p.Offered.toLowerCase().includes(search.toLowerCase())
   )
 
   const isMatched = (person) => matches.some((m) => m.personId === person.id)
