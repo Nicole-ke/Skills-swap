@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { getCurrentUser, logout } from "../utils/auth";
+import { getCurrentUser } from "../utils/auth";
 import Logo from "./Logo";
 
 const LINKS = [
   { to: "/", label: "Discover", end: true },
   { to: "/matches", label: "Matches" },
-  { to: "/saved", label: " Saved" },
+  { to: "/saved", label: "♥ Saved" },
   { to: "/skills", label: "Add your skills" },
 ];
 
@@ -23,12 +23,6 @@ export default function Navbar() {
         ? "bg-purple-100 text-purple-700"
         : "text-gray-600 hover:bg-pink-50 hover:text-pink-600"
     }`;
-
-  function handleLogout() {
-    logout();
-    setOpen(false);
-    navigate("/");
-  }
 
   return (
     <nav className="sticky top-0 z-40 border-b border-purple-100 bg-white/80 backdrop-blur">
@@ -62,15 +56,7 @@ export default function Navbar() {
             </NavLink>
           ))}
 
-          {user ? (
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="rounded-full bg-pink-100 px-4 py-2 text-sm font-semibold text-pink-700 transition hover:bg-pink-200 md:ml-2"
-            >
-              {user.name.split(" ")[0]} · Log out
-            </button>
-          ) : (
+          {!user && (
             <NavLink
               to="/login"
               onClick={() => setOpen(false)}

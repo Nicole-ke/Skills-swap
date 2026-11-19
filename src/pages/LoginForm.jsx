@@ -31,7 +31,7 @@
         //Dont keep the password in localStorage
         const { password: _password, ...userWithoutPassword } = user;
         setCurrentUser(userWithoutPassword);
-        navigate("/");
+        navigate("/skills");
       } catch {
           setMessage("Can't reach the server. Is json-server running?");
         } finally {
