@@ -7,7 +7,7 @@ function storageKey(userId) {
 
 export function getSavedIds(userId) {
 try {
-    return JSON.parse(localStorage.getItem(storageKey(useId)) || "[]" );
+    return JSON.parse(localStorage.getItem(storageKey(userId)) || "[]" );
 } catch {
     return [];
 }
