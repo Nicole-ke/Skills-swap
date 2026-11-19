@@ -9,7 +9,7 @@ import { useState } from "react";
 import CardsSection from "./components/CardsSection";
 import Logo from "./components/Logo";
 
-import Search from "./pages/searchBar";
+import Search from "./pages/Search";
 
 function App() {
   const [search, setSearch] = useState("");

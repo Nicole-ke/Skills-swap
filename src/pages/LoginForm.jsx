@@ -1,13 +1,46 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
 
-export default function LoginForm() {
-  const [message, setMessage] = useState("");
+  import { useState } from "react";
+  import { Link, useNavigate } from "react-router-dom";
+  import { setCurrentUser } from "../utils/auth";
+  import { API_URL } from "../hooks/useUsers";
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    setMessage("Sign-in is not connected yet. Please try again later.");
-  }
+  export default function LoginForm() {
+    const [message, setMessage] = useState("");
+    const [submitting, setSubmitting] = useState(false);
+    const navigate = useNavigate();
+
+    async function handleSubmit(event) {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      const email = formData.get("email").trim().toLowerCase();
+      const password = formData.get("password");
+
+      setSubmitting(true);
+      setMessage("");
+
+      try {
+        const response = await fetch (`${API_URL}/users`);
+        const users = await response.json();
+        const user = users.find((u) => (u.email || "").toLowerCase() === email);
+
+        if (!user || user.password !== password) {
+          setMessage ("Wrong email or password. Please try again");
+          return;
+        }
+
+        //Dont keep the password in localStorage
+        const { password: _password, ...userWithoutPassword } = user;
+        setCurrentUser(userWithoutPassword);
+        navigate("/");
+      } catch {
+          setMessage("Can't reach the server. Is json-server running?");
+        } finally {
+          setSubmitting(false);
+
+        }
+      }
+    
+
 
   return (
     <main className="flex min-h-[calc(100vh-4.5rem)] items-center justify-center bg-gradient-to-br from-purple-50 via-white to-indigo-50 px-4 py-12">
@@ -102,3 +135,5 @@ export default function LoginForm() {
     </main>
   );
 }
+
+
