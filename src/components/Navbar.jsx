@@ -1,51 +1,34 @@
 import { useState } from "react";
-import { NavLink,useLocation,useNavigate,useSearchParams } from "react-router-dom";
-import SearchBar from "./searchBar";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { getCurrentUser } from "../utils/auth";
 import Logo from "./Logo";
 
 const LINKS = [
-  
-{ to: "/discover", label: "Discover" },
-  { to: "/", label: "Matches", end: true },
-  { to: "/search", label: "Search" },
+  { to: "/", label: "Discover", end: true },
+  { to: "/matches", label: "Matches" },
   { to: "/saved", label: "♥ Saved" },
   { to: "/skills", label: "Add your skills" },
-  { to: "/login", label: "Login" },
-]
+];
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const [params] = useSearchParams();
-  const {pathname} = useLocation();
+  // Re-render on every route change so the login status stays current.
+  useLocation();
+  const user = getCurrentUser();
 
   const linkClass = ({ isActive }) =>
-    `rounded-md px-3 py-2 text-sm font-medium transition ${
+    `rounded-full px-4 py-2 text-sm font-semibold transition ${
       isActive
         ? "bg-purple-100 text-purple-700"
-        : "text-gray-700 hover:bg-gray-100 hover:text-purple-600"
+        : "text-gray-600 hover:bg-pink-50 hover:text-pink-600"
     }`;
 
-    function handleSearch(event) {
-        //stays on discover if we are there .otherwise go to search
-        const target = pathname === "/discover" ? "/discover" : "/search";//decides which page to send to pathname(?)if else
-           // What the user typed, made safe for a URL
-    const text = encodeURIComponent(event.target.value);
-    // Go to e.g. /search?q=guitar
-    navigate(`${page}?q=${text}`);
-  }
-                      //page shown above,query string,      
-    }
-
   return (
-    <nav className="border-b border-gray-200 bg-white">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-        <button
-          type="button"
-          className="text-lg font-semibold text-purple-700"
-          onClick={() => navigate("/")}
-        >
-          Skills Swap
+    <nav className="sticky top-0 z-40 border-b border-purple-100 bg-white/80 backdrop-blur">
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3">
+        <button type="button" onClick={() => navigate("/")} aria-label="SkillSwap home">
+          <Logo />
         </button>
 
         <button
@@ -58,16 +41,30 @@ export default function Navbar() {
           ☰
         </button>
 
-        <div className={`${open ? "block" : "hidden"} space-y-2 md:flex md:space-y-0 md:items-center md:gap-2`}>
+        <div
+          className={`${open ? "flex" : "hidden"} w-full flex-col gap-2 md:flex md:w-auto md:flex-row md:items-center md:gap-1`}
+        >
           {LINKS.map(({ to, label, end }) => (
-            <NavLink key={to} to={to} end={end} className={linkClass}>
+            <NavLink
+              key={to}
+              to={to}
+              end={end}
+              className={linkClass}
+              onClick={() => setOpen(false)}
+            >
               {label}
             </NavLink>
           ))}
-        </div>
 
-        <div className="ml-4">
-          <SearchBar params={params} />
+          {!user && (
+            <NavLink
+              to="/login"
+              onClick={() => setOpen(false)}
+              className="rounded-full bg-purple-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-purple-700 md:ml-2"
+            >
+              Login
+            </NavLink>
+          )}
         </div>
       </div>
     </nav>
