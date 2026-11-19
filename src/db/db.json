@@ -28,6 +28,11 @@
         "Photography"
       ],
       "email": "brian@example.com"
+      "offers": ["Guitar", "Music theory"],
+      "wants": ["Photography"],
+      "email": "brian@example.com",
+      "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dd/Uhuru_Kenyatta.jpg/960px-Uhuru_Kenyatta.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+
     },
     {
       "id": 3,
@@ -43,6 +48,11 @@
         "Figma"
       ],
       "email": "faith@example.com"
+      "offers": ["Swahili", "Public speaking"],
+      "wants": ["Excel", "Figma"],
+      "email": "faith@example.com",
+      "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d3/Raila_Odinga_2009_%28cropped%29.jpg/960px-Raila_Odinga_2009_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20180603095325"
+
     },
     {
       "id": 4,
@@ -58,6 +68,11 @@
         "Cooking"
       ],
       "email": "kevin@example.com"
+      "offers": ["Python", "React"],
+      "wants": ["Guitar", "Cooking"],
+      "email": "kevin@example.com",
+      "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/01/Sifuna_in_2024.jpg/960px-Sifuna_in_2024.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+
     },
     {
       "id": 5,
@@ -72,6 +87,11 @@
         "Swahili"
       ],
       "email": "grace@example.com"
+      "offers": ["Cooking", "Baking"],
+      "wants": ["Swahili"],
+      "email": "grace@example.com",
+      "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2e/Martha_Karua_%28cropped_2%29.jpg/960px-Martha_Karua_%28cropped_2%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+
     },
     {
       "id": 6,
@@ -95,6 +115,48 @@
       "wants": [],
       "phone": "+254797110231",
       "id": 7
+      "email": "sam@example.com",
+      "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b7/Mwai_Kibaki_2011-07-08.jpg/960px-Mwai_Kibaki_2011-07-08.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+
+    },
+
+    {
+      "id": 7,
+      "name": "Sam Mutiso",
+      "location": "Nairobi",
+      "bio": "New here, still deciding what to learn.",
+      "offers": ["Photography"],
+      "wants": [],
+      "email": "sam@example.com",
+      "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/da/Wangari_Maathai_in_2001.jpg/960px-Wangari_Maathai_in_2001.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+
+
+    },
+
+   
+     {
+      "id": 8,
+      "name": "Sam Mutiso",
+      "location": "Nairobi",
+      "bio": "New here, still deciding what to learn.",
+      "offers": ["Photography"],
+      "wants": [],
+      "email": "sam@example.com",
+      "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9a/Daniel_arap_Moi_1979b.jpg/960px-Daniel_arap_Moi_1979b.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+
+    },
+
+     {
+      "id": 9,
+      "name": "Sam Mutiso",
+      "location": "Nairobi",
+      "bio": "New here, still deciding what to learn.",
+      "offers": ["Photography"],
+      "wants": [],
+      "email": "sam@example.com",
+      "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/Abel_Mutua%2C_May_2021.png/960px-Abel_Mutua%2C_May_2021.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+
     }
   ]
+
 }

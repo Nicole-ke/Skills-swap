@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+
 import Matches from "./pages/Matches";
 import Profile from "./pages/Profile";
 import SavedMatches from "./pages/SavedMatches";
@@ -7,6 +8,7 @@ import LoginForm from "./pages/LoginForm";
 import Search from "./pages/Search";
 
 function App() {
+  const [search, setSearch] = useState("");
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-gray-50">
@@ -16,6 +18,9 @@ function App() {
           </Link>
 
           <div className="flex gap-5 font-medium text-gray-700">
+            <Link to="/discover" className="hover:text-purple-600">
+              Discover
+            </Link>
             <Link to="/" className="hover:text-purple-600">
               Matches
             </Link>
@@ -38,6 +43,7 @@ function App() {
           <Route path="/skills" element={<SkillForm />} />
           <Route path="/login" element={<LoginForm />} />
           <Route path="/profile/:id" element={<Profile />} />
+          <Route path="/discover" element={<CardsSection search={search} />} />
         </Routes>
       </div>
     </BrowserRouter>
