@@ -46,7 +46,7 @@ function SavedMatches() {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="mx-auto max-w-6xl">
-        <h1 className="text-3xl font-bold text-gray-900">Saved Matches ❤️</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Saved Matches </h1>
         <p className="mt-2 text-gray-600">
           People you have saved for future skill exchanges.
         </p>
