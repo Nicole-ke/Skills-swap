@@ -51,7 +51,7 @@ function scoreMatch(user, myOffers, myWants) {
 
 function Matches() {
   const currentUser = getCurrentUser();
-  const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
   const skill = searchParams.get("skill") || "";
 
   const { users, loading, error } = useUsers();
@@ -73,6 +73,28 @@ function Matches() {
   if (!currentUser) return <LoginPrompt title="Log in to see your matches" />;
   if (loading) return <p className="p-10 text-center text-gray-500">Finding your matches...</p>;
   if (error) return <p className="p-10 text-center text-red-500">{error}</p>;
+
+    if (!skill) {
+    return (
+      <div className="mx-auto max-w-xl px-6 py-16">
+        <div className="animate-rise rounded-3xl bg-linear-to-r from-purple-100 via-pink-100 to-amber-100 p-10 text-center">
+          <div className="text-5xl"></div>
+          <h1 className="mt-4 text-2xl font-extrabold text-gray-900">
+            Your swap matches will be found here
+          </h1>
+          <p className="mt-2 text-gray-600">
+            Search for a skill on Discover and the people who match you will show up on this page.
+          </p>
+          <Link
+            to="/"
+            className="mt-6 inline-block rounded-full bg-purple-600 px-8 py-3 font-semibold text-white transition hover:bg-purple-700"
+          >
+            Search on Discover
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   // Prefer the database copy of the user in case their skills changed since login.
   const me = users.find((user) => String(user.id) === String(currentUser.id)) || currentUser;
@@ -116,7 +138,7 @@ function Matches() {
           >
             New search
           </Link>
-          {skill && (
+                   {skill && (
             <button
               onClick={() => setSearchParams({})}
               className="rounded-full bg-white/60 px-4 py-2 text-sm font-semibold text-gray-600 transition hover:bg-white"
@@ -124,6 +146,7 @@ function Matches() {
               Show everyone
             </button>
           )}
+
           <Link
             to="/saved"
             className="rounded-full bg-pink-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-pink-600"
