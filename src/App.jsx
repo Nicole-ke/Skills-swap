@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Matches from "./pages/Matches";
 import Profile from "./pages/Profile";
@@ -32,6 +31,7 @@ function App() {
         </nav>
 
         <Routes>
+          <Route path="/search" element={<Search />} />
           <Route path="/" element={<Matches />} />
           <Route path="/saved" element={<SavedMatches />} />
           <Route path="/skills" element={<SkillForm />} />
