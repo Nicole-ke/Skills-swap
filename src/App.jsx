@@ -8,7 +8,7 @@ import LoginForm from "./pages/LoginForm";
 import { useState } from "react";
 import CardsSection from "./components/CardsSection";
 
-import Search from "./pages/searchBar";
+import Search from "./pages/Search";
 
 function App() {
   const [search, setSearch] = useState("");

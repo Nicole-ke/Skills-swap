@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import SearchBar from "./components/searchBar";
-import FilterChips from "./components/FilterChips";
+import SearchBar from "../components/searchBar";
+import FilterChips from "../components/FilterChips";
 
-
-import { BASE_URL } from "./utils/utils";
+import { BASE_URL } from "../utils/utils";
 const CATEGORIES = ["All", "Design", "Coding", "Music", "Languages"];
 
 const CATEGORY_KEYWORDS = {
