@@ -1,8 +1,9 @@
-
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Matches from "./pages/Matches";
 import Profile from "./pages/Profile";
 import SavedMatches from "./pages/SavedMatches";
+import Search from "./pages/Search";
+
 
 function App() {
   return (
@@ -20,10 +21,14 @@ function App() {
             <Link to="/saved" className="hover:text-purple-600">
               ♥ Saved
             </Link>
+            <Link to="/search" className="hover:text-purple-600">
+              Search
+            </Link>
           </div>
         </nav>
 
         <Routes>
+          <Route path="/search" element={<Search />} />
           <Route path="/" element={<Matches />} />
           <Route path="/saved" element={<SavedMatches />} />
           <Route path="/profile/:id" element={<Profile />} />
