@@ -168,7 +168,7 @@ function SavedMatches() {
                     onClick={() => handleRequest(user)}
                     className="rounded-xl bg-purple-600 py-3 font-semibold text-white transition hover:bg-purple-700"
                   >
-                    🤝 Request to match
+                     Request to match
                   </button>
                 )}
                 {request?.status === "pending" && request.fromId === myId && (
