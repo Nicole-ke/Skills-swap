@@ -1,55 +1,46 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { BASE_URL } from "../utils/utils";
 
-export default function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const navigate = useNavigate();
+  import { useState } from "react";
+  import { Link, useNavigate } from "react-router-dom";
+  import { setCurrentUser } from "../utils/auth";
+  import { API_URL } from "../hooks/useUsers";
 
-  async function handleSubmit(event) {
-    event.preventDefault();
-    setIsSubmitting(true);
+  export default function LoginForm() {
+    const [message, setMessage] = useState("");
+    const [submitting, setSubmitting] = useState(false);
+    const navigate = useNavigate();
 
-    try {
-      const response = await fetch(`${BASE_URL}/users`);
-      if (!response.ok) {
-        throw new Error("Could not check profiles. Please try again.");
+    async function handleSubmit(event) {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      const email = formData.get("email").trim().toLowerCase();
+      const password = formData.get("password");
+
+      setSubmitting(true);
+      setMessage("");
+
+      try {
+        const response = await fetch (`${API_URL}/users`);
+        const users = await response.json();
+        const user = users.find((u) => (u.email || "").toLowerCase() === email);
+
+        if (!user || user.password !== password) {
+          setMessage ("Wrong email or password. Please try again");
+          return;
+        }
+
+        //Dont keep the password in localStorage
+        const { password: _password, ...userWithoutPassword } = user;
+        setCurrentUser(userWithoutPassword);
+        navigate("/skills");
+      } catch {
+          setMessage("Can't reach the server. Is json-server running?");
+        } finally {
+          setSubmitting(false);
+
+        }
       }
+    
 
-      const users = await response.json();
-      if (!Array.isArray(users)) {
-        throw new Error("The database returned an unexpected response.");
-      }
-
-      const normalizedEmail = email.trim().toLowerCase();
-      const user = users.find(
-        (profile) => profile.email?.trim().toLowerCase() === normalizedEmail
-      );
-
-      if (!user) {
-        console.warn("Sign-in failed: no profile found for the entered email.");
-        return;
-      }
-
-      localStorage.setItem(
-        "skillswap_current_user",
-        JSON.stringify({ id: user.id, name: user.name, email: user.email })
-      );
-      console.info(
-        `Demo sign-in successful for ${user.name}; email match only, no password authentication.`
-      );
-      navigate("/");
-    } catch (error) {
-      console.error(
-        error instanceof TypeError
-          ? `Could not connect to the database at ${BASE_URL}. Start it with npm run server and try again.`
-          : error.message
-      );
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
 
   return (
     <main className="flex min-h-[calc(100vh-4.5rem)] items-center justify-center bg-gradient-to-br from-purple-50 via-white to-indigo-50 px-4 py-12">
@@ -114,3 +105,5 @@ export default function LoginForm() {
     </main>
   );
 }
+
+
