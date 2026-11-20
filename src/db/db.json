@@ -5,17 +5,29 @@
       "name": "Amina Wanjiru",
       "location": "Nairobi",
       "bio": "Designer who wants to learn coding basics.",
-      "offers": ["Graphic design", "Figma"],
-      "wants": ["Python", "Data analysis"],
-      "email": "amina@example.com",
-      "photo": "https://i.pravatar.cc/400?img=5"
-
+      "offers": [
+        "Graphic design",
+        "Figma"
+      ],
+      "wants": [
+        "Python",
+        "Data analysis"
+      ],
+      "email": "amina@example.com"
     },
     {
       "id": 2,
       "name": "Brian Otieno",
       "location": "Kisumu",
       "bio": "Weekend musician, happy to teach beginners.",
+      "offers": [
+        "Guitar",
+        "Music theory"
+      ],
+      "wants": [
+        "Photography"
+      ],
+      "email": "brian@example.com"
       "offers": ["Guitar", "Music theory"],
       "wants": ["Photography"],
       "email": "brian@example.com",
@@ -27,6 +39,15 @@
       "name": "Faith Mwende",
       "location": "Mombasa",
       "bio": "Language tutor looking to level up on tools.",
+      "offers": [
+        "Swahili",
+        "Public speaking"
+      ],
+      "wants": [
+        "Excel",
+        "Figma"
+      ],
+      "email": "faith@example.com"
       "offers": ["Swahili", "Public speaking"],
       "wants": ["Excel", "Figma"],
       "email": "faith@example.com",
@@ -38,6 +59,15 @@
       "name": "Kevin Njoroge",
       "location": "Nakuru",
       "bio": "Developer who wants to finally learn guitar.",
+      "offers": [
+        "Python",
+        "React"
+      ],
+      "wants": [
+        "Guitar",
+        "Cooking"
+      ],
+      "email": "kevin@example.com"
       "offers": ["Python", "React"],
       "wants": ["Guitar", "Cooking"],
       "email": "kevin@example.com",
@@ -49,6 +79,14 @@
       "name": "Grace Achieng",
       "location": "Eldoret",
       "bio": "Home cook who loves sharing recipes.",
+      "offers": [
+        "Cooking",
+        "Baking"
+      ],
+      "wants": [
+        "Swahili"
+      ],
+      "email": "grace@example.com"
       "offers": ["Cooking", "Baking"],
       "wants": ["Swahili"],
       "email": "grace@example.com",
@@ -60,8 +98,23 @@
       "name": "Sam Mutiso",
       "location": "Nairobi",
       "bio": "New here, still deciding what to learn.",
-      "offers": ["Photography"],
+      "offers": [
+        "Photography"
+      ],
       "wants": [],
+      "email": "sam@example.com"
+    },
+    {
+      "name": "Wisdom Njoroge",
+      "email": "wisdomnjoroge16@gmail.com",
+      "location": "Nairobi",
+      "bio": "",
+      "offers": [
+        "Frontend Development"
+      ],
+      "wants": [],
+      "phone": "+254797110231",
+      "id": 7
       "email": "sam@example.com",
       "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b7/Mwai_Kibaki_2011-07-08.jpg/960px-Mwai_Kibaki_2011-07-08.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
 

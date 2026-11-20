@@ -5,13 +5,14 @@ import Matches from "./pages/Matches";
 import SavedMatches from "./pages/SavedMatches";
 import SkillForm from "./pages/SkillForm";
 import LoginForm from "./pages/LoginForm";
+import Search from "./pages/Search";
 import Profile from "./pages/Profile";
 
 function App() {
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-rose-50/40">
-        <Navbar />
+        <Navbar />Email
         <Routes>
           <Route path="/" element={<CardsSection />} />
           <Route path="/discover" element={<Navigate to="/" replace />} />

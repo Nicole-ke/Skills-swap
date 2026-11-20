@@ -53,7 +53,7 @@
             Welcome back
           </h1>
           <p className="mt-2 text-sm text-gray-600">
-            Sign in to continue your skill exchange.
+            Enter the email on your SkillSwap profile.
           </p>
         </div>
 
@@ -71,56 +71,26 @@
               type="email"
               autoComplete="email"
               required
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
               placeholder="you@example.com"
               className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-purple-500 focus:ring-4 focus:ring-purple-100"
             />
           </div>
 
-          <div>
-            <div className="mb-2 flex items-center justify-between">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Password
-              </label>
-              <button
-                type="button"
-                className="text-sm font-medium text-purple-700 hover:text-purple-800"
-                onClick={() =>
-                  setMessage("Password reset is not available yet.")
-                }
-              >
-                Forgot password?
-              </button>
-            </div>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              required
-              placeholder="Enter your password"
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-purple-500 focus:ring-4 focus:ring-purple-100"
-            />
-          </div>
+          <p className="rounded-lg bg-amber-50 p-3 text-sm text-amber-800">
+            Demo sign-in checks your email only. This app does not yet provide
+            password-based authentication.
+          </p>
 
           <button
             type="submit"
-            className="w-full rounded-lg bg-purple-700 px-4 py-3 font-semibold text-white shadow-sm transition hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-200"
+            disabled={isSubmitting}
+            className="w-full rounded-lg bg-purple-700 px-4 py-3 font-semibold text-white shadow-sm transition hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-200 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Sign in
+            {isSubmitting ? "Checking profile..." : "Continue"}
           </button>
         </form>
-
-        {message && (
-          <p
-            className="mt-5 rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-800"
-            role="status"
-          >
-            {message}
-          </p>
-        )}
 
         <p className="mt-7 text-center text-sm text-gray-600">
           New to SkillSwap?{" "}

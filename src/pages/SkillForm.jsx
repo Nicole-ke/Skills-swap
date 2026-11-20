@@ -124,6 +124,11 @@ export default function SkillForm() {
       next.password = 'Password must be at least 4 characters';
     }
 
+    if (!form.location.trim()) {
+      next.location = 'Location is required';
+      valid = false;
+    }
+
     if (!form.phone.trim()) {
       next.phone = 'Phone number is required';
     } else if (!/^[+]?[\d\s\-()]{7,15}$/.test(form.phone)) {
