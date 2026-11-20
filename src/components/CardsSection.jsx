@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import SkillCard from "./SkillCard"
 import SwipeDeck from "./SwipeDeck"
 import PersonDetails from "./PersonDetails"
@@ -8,6 +9,7 @@ import DiscoverSearch from "./DiscoverSearch";
 const API = "http://localhost:3000"
 
 function CardsSection({ search = "" }) {
+  const navigate = useNavigate()
   const [people, setPeople] = useState([])
   const [matches, setMatches] = useState([])
   const [view, setView] = useState("home") // "home", "swipe", "details"
@@ -23,8 +25,9 @@ function CardsSection({ search = "" }) {
       .catch(() => setError("Can't reach the database. Is json-server running?"))
 
     fetch(`${API}/matches`)
-      .then((res) => res.json())
-      .then((data) => setMatches(data))
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => setMatches(Array.isArray(data) ? data : []))
+      .catch(() => setMatches([]))
   }, [])
 
   const results = people.filter((p) => {
@@ -90,7 +93,10 @@ function CardsSection({ search = "" }) {
                 <SkillCard
                   key={person.id}
                   person={person}
-                  onClick={() => openDetails(person, "home")}
+                  onClick={() => {
+                    const skill = person.offers?.[0]
+                    navigate(skill ? `/matches?skill=${encodeURIComponent(skill)}` : "/matches")
+                  }}
                 />
               ))}
             </div>
