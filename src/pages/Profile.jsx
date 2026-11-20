@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { BASE_URL } from "../utils/utils";
 
 function Profile() {
   const { id } = useParams();
@@ -9,7 +10,7 @@ function Profile() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch(`http://localhost:3000/users/${id}`)
+    fetch(`${BASE_URL}/users/${id}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Profile not found");

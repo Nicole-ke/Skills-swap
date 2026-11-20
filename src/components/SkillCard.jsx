@@ -25,7 +25,9 @@ function SkillCard({ person, onClick }) {
         />
         <div>
           <p className="font-semibold text-gray-800">{person.name}</p>
-          <p className="text-xs text-gray-500">Teaches {person.skillOffered}</p>
+          <p className="text-xs text-gray-500">
+            Teaches {(Array.isArray(person.offers) ? person.offers : []).join(", ") || "Various skills"}
+          </p>
         </div>
       </div>
 
@@ -41,10 +43,10 @@ function SkillCard({ person, onClick }) {
       {/* Caption tags */}
       <div className="p-4 flex flex-wrap gap-2">
         <span className="bg-white/70 text-gray-700 text-xs px-3 py-1 rounded-full">
-          {person.timeToLearn}
+          {person.timeToLearn || "Flexible timing"}
         </span>
         <span className="bg-white/70 text-gray-700 text-xs px-3 py-1 rounded-full">
-         Wants {person.skillWanted}
+         Wants {(Array.isArray(person.wants) ? person.wants : []).join(", ") || "Anything new"}
         </span>
       </div>
     </div>

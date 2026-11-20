@@ -1,5 +1,7 @@
 function PersonDetails({ person, onBack, onLike, isMatched, showWhatsApp }) {
-  const message = `Hi ${person.name}! I saw you teach ${person.skillOffered} on SkillSwap. Want to swap skills?`
+  const offered = Array.isArray(person.offers) ? person.offers : []
+  const wanted = Array.isArray(person.wants) ? person.wants : []
+  const message = `Hi ${person.name}! I saw you on SkillSwap and would like to exchange skills.`
   const whatsappLink = `https://wa.me/${person.phone}?text=${encodeURIComponent(message)}`
 
   return (
@@ -17,9 +19,10 @@ function PersonDetails({ person, onBack, onLike, isMatched, showWhatsApp }) {
 
         <div className="p-6 space-y-2">
           <h2 className="text-3xl font-bold text-gray-800">{person.name}</h2>
-          <p> Teaches: {person.skillOffered}</p>
-          <p> Takes about: {person.timeToLearn}</p>
-          <p> Wants in exchange: {person.skillWanted}</p>
+          <p className="text-gray-500">{person.location}</p>
+          <p className="pt-2"><span className="font-semibold">Can teach:</span> {offered.join(", ") || "Not listed"}</p>
+          <p><span className="font-semibold">Takes about:</span> {person.timeToLearn || "To be agreed"}</p>
+          <p><span className="font-semibold">Wants to learn:</span> {wanted.join(", ") || "Open to ideas"}</p>
 
           {onLike && (
             <button

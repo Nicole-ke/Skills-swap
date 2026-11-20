@@ -12,13 +12,14 @@ function App() {
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-rose-50/40">
-        <Navbar />Email
+        <Navbar />
         <Routes>
           <Route path="/" element={<CardsSection />} />
           <Route path="/discover" element={<Navigate to="/" replace />} />
           <Route path="/matches" element={<Matches />} />
           <Route path="/saved" element={<SavedMatches />} />
           <Route path="/skills" element={<SkillForm />} />
+          <Route path="/signup" element={<SkillForm />} />
           <Route path="/login" element={<LoginForm />} />
           <Route path="/profile/:id" element={<Profile />} />
         </Routes>

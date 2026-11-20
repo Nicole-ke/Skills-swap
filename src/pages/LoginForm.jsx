@@ -1,70 +1,77 @@
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../utils/utils";
 
-  import { useState } from "react";
-  import { Link, useNavigate } from "react-router-dom";
-  import { setCurrentUser } from "../utils/auth";
-  import { API_URL } from "../hooks/useUsers";
+export default function LoginForm() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
-  export default function LoginForm() {
-    const [message, setMessage] = useState("");
-    const [submitting, setSubmitting] = useState(false);
-    const navigate = useNavigate();
+  async function handleSubmit(event) {
+    event.preventDefault();
+    setIsSubmitting(true);
+    setMessage("");
 
-    async function handleSubmit(event) {
-      event.preventDefault();
-      const formData = new FormData(event.target);
-      const email = formData.get("email").trim().toLowerCase();
-      const password = formData.get("password");
+    try {
+      const response = await fetch(`${BASE_URL}/users`);
+      if (!response.ok) throw new Error("Could not check profiles.");
 
-      setSubmitting(true);
-      setMessage("");
+      const users = await response.json();
+      const normalizedEmail = email.trim().toLowerCase();
+      const user = users.find((profile) =>
+        (profile.email || "").trim().toLowerCase() === normalizedEmail
+      );
 
-      try {
-        const response = await fetch (`${API_URL}/users`);
-        const users = await response.json();
-        const user = users.find((u) => (u.email || "").toLowerCase() === email);
-
-        if (!user || user.password !== password) {
-          setMessage ("Wrong email or password. Please try again");
-          return;
-        }
-
-        //Dont keep the password in localStorage
-        const { password: _password, ...userWithoutPassword } = user;
-        setCurrentUser(userWithoutPassword);
-        navigate("/skills");
-      } catch {
-          setMessage("Can't reach the server. Is json-server running?");
-        } finally {
-          setSubmitting(false);
-
-        }
+      if (!user || user.password !== password) {
+        setMessage("Wrong email or password. Please try again.");
+        return;
       }
-    
 
+      const profile = { ...user };
+      delete profile.password;
+      localStorage.setItem("skillswap_current_user", JSON.stringify(profile));
+      navigate("/");
+    } catch {
+      setMessage("Can't reach the server. Start JSON Server and try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   return (
-    <main className="flex min-h-[calc(100vh-4.5rem)] items-center justify-center bg-gradient-to-br from-purple-50 via-white to-indigo-50 px-4 py-12">
-      <section className="w-full max-w-md rounded-2xl border border-gray-100 bg-white p-8 shadow-xl shadow-purple-900/5 sm:p-10">
-        <div className="mb-8 text-center">
-          <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-100 text-2xl font-bold text-purple-700">
-            S
-          </div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-            Welcome back
+    <main className="mx-auto grid min-h-[calc(100vh-73px)] max-w-6xl items-center gap-8 px-4 py-8 md:grid-cols-[1fr_440px] md:px-8">
+      <section className="hidden min-h-130 overflow-hidden rounded-3xl bg-[#17151f] text-white md:flex md:flex-col md:justify-between">
+        <div className="p-9">
+          <p className="text-sm font-bold uppercase tracking-[0.16em] text-pink-300">SkillSwap</p>
+          <h1 className="mt-6 max-w-md text-5xl font-black leading-[1.05]">
+            Learn something new from someone nearby.
           </h1>
-          <p className="mt-2 text-sm text-gray-600">
-            Enter the email on your SkillSwap profile.
-          </p>
+        </div>
+        <div className="grid grid-cols-2 border-t border-white/10">
+          <div className="p-7">
+            <p className="text-3xl font-black text-pink-300">40+</p>
+            <p className="mt-1 text-sm text-white/65">skills to swap</p>
+          </div>
+          <div className="border-l border-white/10 p-7">
+            <p className="text-3xl font-black text-sky-300">1:1</p>
+            <p className="mt-1 text-sm text-white/65">human exchange</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto w-full max-w-md">
+        <div className="mb-8">
+          <p className="text-sm font-bold text-purple-700">Welcome back</p>
+          <h2 className="mt-2 text-4xl font-black text-gray-950">Sign in</h2>
+          <p className="mt-3 text-gray-500">Continue to your skill exchanges.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label
-              htmlFor="email"
-              className="mb-2 block text-sm font-medium text-gray-700"
-            >
-              Email address
-            </label>
+            <label htmlFor="email" className="mb-2 block text-sm font-semibold text-gray-700">Email address</label>
             <input
               id="email"
               name="email"
@@ -74,36 +81,42 @@
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               placeholder="you@example.com"
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-purple-500 focus:ring-4 focus:ring-purple-100"
+              className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3.5 outline-none transition placeholder:text-gray-400 focus:border-purple-500 focus:ring-4 focus:ring-purple-100"
             />
           </div>
 
-          <p className="rounded-lg bg-amber-50 p-3 text-sm text-amber-800">
-            Demo sign-in checks your email only. This app does not yet provide
-            password-based authentication.
-          </p>
+          <div>
+            <label htmlFor="password" className="mb-2 block text-sm font-semibold text-gray-700">Password</label>
+            <div className="relative">
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                autoComplete="current-password"
+                required
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                placeholder="Enter your password"
+                className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3.5 pr-16 outline-none transition placeholder:text-gray-400 focus:border-purple-500 focus:ring-4 focus:ring-purple-100"
+              />
+              <button type="button" onClick={() => setShowPassword((shown) => !shown)} className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-500">
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
+          </div>
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full rounded-lg bg-purple-700 px-4 py-3 font-semibold text-white shadow-sm transition hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-200 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {isSubmitting ? "Checking profile..." : "Continue"}
+          <button type="submit" disabled={isSubmitting} className="w-full rounded-xl bg-gray-950 px-4 py-3.5 font-bold text-white transition hover:bg-purple-700 disabled:cursor-wait disabled:opacity-60">
+            {isSubmitting ? "Signing in..." : "Sign in"}
           </button>
         </form>
 
+        {message && <p className="mt-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800" role="status">{message}</p>}
+
         <p className="mt-7 text-center text-sm text-gray-600">
           New to SkillSwap?{" "}
-          <Link
-            to="/skills"
-            className="font-semibold text-purple-700 hover:text-purple-800"
-          >
-            Create a profile
-          </Link>
+          <Link to="/signup" className="font-bold text-purple-700 hover:text-purple-900">Create an account</Link>
         </p>
       </section>
     </main>
   );
 }
-
-

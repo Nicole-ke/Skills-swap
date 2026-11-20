@@ -1,8 +1,6 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import SkillCard from '../components/SkillCard';
-import { API_URL } from '../hooks/useUsers';
-import { getCurrentUser, setCurrentUser, logout } from '../utils/auth';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { BASE_URL } from '../utils/utils';
 
 const SKILLS = [
   'Frontend Development',
@@ -13,88 +11,17 @@ const SKILLS = [
   'DevOps',
   'Data Science',
   'Machine Learning',
+  'Other',
 ];
 
-const initialForm = {
-  name: '',
-  email: '',
-  password: '',
-  phone: '',
-  location: '',
-  photo: '',
-  bio: '',
-  offers: '',
-  wants: '',
-  timeToLearn: '',
-};
+const initialForm = { name: '', email: '', password: '', location: '', phone: '', skill: '' };
+const initialErrors = { name: '', email: '', password: '', location: '', phone: '', skill: '' };
 
-const inputClass =
-  'w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-purple-400 focus:ring-4 focus:ring-purple-100';
-
-function toList(text) {
-  return text
-    .split(',')
-    .map((item) => item.trim())
-    .filter(Boolean);
-}
-
-// WhatsApp links need the number in international format, e.g. 0712... -> 254712...
-function toWhatsAppNumber(phone) {
-  const digits = phone.replace(/\D/g, '');
-  return digits.startsWith('0') ? `254${digits.slice(1)}` : digits;
-}
-
-function userToForm(user) {
-  return {
-    ...initialForm,
-    name: user.name || '',
-    email: user.email || '',
-    phone: user.phone || '',
-    location: user.location || '',
-    photo: user.photo || '',
-    bio: user.bio || '',
-    offers: (user.offers || []).join(', '),
-    wants: (user.wants || []).join(', '),
-    timeToLearn: user.timeToLearn || '',
-  };
-}
-
-function Field({ label, name, error, hint, children }) {
-  return (
-    <div>
-      <label htmlFor={name} className="mb-2 block text-sm font-medium text-gray-700">
-        {label}
-      </label>
-      {children}
-      {hint && !error && <p className="mt-1 text-xs text-gray-400">{hint}</p>}
-      {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
-    </div>
-  );
-}
-
-export default function SkillForm() {
-  const navigate = useNavigate();
-  const [currentUser, setUser] = useState(getCurrentUser);
-  const isEditing = Boolean(currentUser);
-
-  const [form, setForm] = useState(() =>
-    currentUser ? userToForm(currentUser) : initialForm
-  );
-  const [errors, setErrors] = useState({});
-  const [saving, setSaving] = useState(false);
+export default function UserForm() {
+  const [form, setForm] = useState(initialForm);
+  const [errors, setErrors] = useState(initialErrors);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState('');
-  const [cardKey, setCardKey] = useState(0);
-
-  // Load the latest copy of the profile in case it changed elsewhere.
-  useEffect(() => {
-    if (!currentUser) return;
-    fetch(`${API_URL}/users/${currentUser.id}`)
-      .then((res) => (res.ok ? res.json() : null))
-      .then((user) => {
-        if (user) setForm(userToForm(user));
-      })
-      .catch(() => {});
-  }, [currentUser]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -102,26 +29,26 @@ export default function SkillForm() {
     setErrors((prev) => ({ ...prev, [name]: '' }));
   };
 
-  const addSkill = (skill) => {
-    const current = toList(form.offers);
-    if (current.includes(skill)) return;
-    setForm((prev) => ({ ...prev, offers: [...current, skill].join(', ') }));
-    setErrors((prev) => ({ ...prev, offers: '' }));
-  };
-
   const validate = () => {
-    const next = {};
+    const next = { ...initialErrors };
+    let valid = true;
 
-    if (!form.name.trim()) next.name = 'Name is required';
+    if (!form.name.trim()) {
+      next.name = 'Name is required';
+      valid = false;
+    }
 
     if (!form.email.trim()) {
       next.email = 'Email is required';
+      valid = false;
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       next.email = 'Enter a valid email address';
+      valid = false;
     }
 
-    if (!isEditing && form.password.length < 4) {
+    if (form.password.length < 4) {
       next.password = 'Password must be at least 4 characters';
+      valid = false;
     }
 
     if (!form.location.trim()) {
@@ -131,207 +58,322 @@ export default function SkillForm() {
 
     if (!form.phone.trim()) {
       next.phone = 'Phone number is required';
+      valid = false;
     } else if (!/^[+]?[\d\s\-()]{7,15}$/.test(form.phone)) {
       next.phone = 'Enter a valid phone number';
+      valid = false;
     }
 
-    if (toList(form.offers).length === 0) {
-      next.offers = 'Add at least one skill you can teach';
+    if (!form.skill) {
+      next.skill = 'Please select a skill';
+      valid = false;
     }
 
     setErrors(next);
-    return Object.keys(next).length === 0;
+    return valid;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
 
-    setSaving(true);
+    setIsSubmitting(true);
     setMessage('');
 
-    const email = form.email.trim().toLowerCase();
-    const profile = {
-      name: form.name.trim(),
-      email,
-      phone: toWhatsAppNumber(form.phone),
-      location: form.location.trim() || 'Nairobi',
-      photo: form.photo.trim() || `https://i.pravatar.cc/400?u=${encodeURIComponent(email)}`,
-      bio: form.bio.trim(),
-      offers: toList(form.offers),
-      wants: toList(form.wants),
-      timeToLearn: form.timeToLearn.trim() || 'To be agreed',
-    };
-
     try {
-      let saved;
-
-      if (isEditing) {
-        const res = await fetch(`${API_URL}/users/${currentUser.id}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(profile),
-        });
-        if (!res.ok) throw new Error('Update failed');
-        saved = await res.json();
-      } else {
-        const users = await fetch(`${API_URL}/users`).then((res) => res.json());
-        if (users.some((u) => (u.email || '').toLowerCase() === email)) {
-          setErrors({ email: 'An account with this email already exists. Log in instead.' });
-          return;
-        }
-
-        const res = await fetch(`${API_URL}/users`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...profile, password: form.password }),
-        });
-        if (!res.ok) throw new Error('Sign up failed');
-        saved = await res.json();
+      const usersResponse = await fetch(`${BASE_URL}/users`);
+      if (!usersResponse.ok) {
+        throw new Error('Could not check existing accounts. Please try again.');
       }
 
-      const { password: _password, ...userWithoutPassword } = saved;
-      setCurrentUser(userWithoutPassword);
-      setUser(userWithoutPassword);
-      setCardKey((key) => key + 1);
-      setMessage(isEditing ? 'Profile updated.' : 'Welcome to SkillSwap! Your card is live.');
-    } catch {
-      setMessage("Couldn't save your profile. Is json-server running?");
+      const users = await usersResponse.json();
+      if (!Array.isArray(users)) {
+        throw new Error('The database returned an unexpected response.');
+      }
+
+      const email = form.email.trim().toLowerCase();
+      const emailExists = users.some(
+        (user) => user.email?.trim().toLowerCase() === email
+      );
+
+      if (emailExists) {
+        setMessage('A profile with this email already exists. Sign in instead.');
+        setErrors((prev) => ({ ...prev, email: 'This email is already registered.' }));
+        return;
+      }
+
+      const response = await fetch(`${BASE_URL}/users`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name.trim(),
+          email,
+          password: form.password,
+          location: form.location.trim(),
+          bio: '',
+          offers: [form.skill],
+          wants: [],
+          phone: form.phone.trim(),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Could not save your profile. Please try again.');
+      }
+
+      setForm(initialForm);
+      setMessage('Profile created. You can now sign in.');
+    } catch (error) {
+      setMessage(
+        error instanceof TypeError
+          ? `Could not connect to the database at ${BASE_URL}. Start JSON Server and try again.`
+          : error.message
+      );
     } finally {
-      setSaving(false);
+      setIsSubmitting(false);
     }
   };
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
-
-  // Live preview of the card as the user types.
-  const previewName = form.name.trim() || 'Your name';
-  const preview = {
-    id: currentUser?.id || 'preview',
-    name: previewName,
-    location: form.location.trim() || 'Nairobi',
-    photo:
-      form.photo.trim() ||
-      `https://i.pravatar.cc/400?u=${encodeURIComponent(form.email || previewName)}`,
-    offers: toList(form.offers),
-    wants: toList(form.wants),
-    timeToLearn: form.timeToLearn.trim() || 'To be agreed',
+  const handleReset = () => {
+    setForm(initialForm);
+    setErrors(initialErrors);
   };
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10">
-      <header className="animate-rise rounded-3xl bg-linear-to-r from-purple-100 via-pink-100 to-sky-100 p-6 md:p-8">
-        <h1 className="text-3xl font-extrabold text-gray-900">
-          {isEditing ? `Your profile, ${previewName.split(' ')[0]}` : 'Create your profile'}
-        </h1>
-        <p className="mt-2 text-gray-600">
-          {isEditing
-            ? 'Update what you teach and what you want to learn.'
-            : 'Tell us what you can teach and what you want to learn. Your card appears below.'}
-        </p>
-      </header>
-
-      <form
-        onSubmit={handleSubmit}
-        noValidate
-        className="mt-8 grid grid-cols-1 gap-5 rounded-3xl border border-purple-100 bg-white p-6 shadow-sm md:grid-cols-2 md:p-8"
-      >
-        <Field label="Full name" name="name" error={errors.name}>
-          <input id="name" name="name" value={form.name} onChange={handleChange} placeholder="Jane Wanjiku" className={inputClass} />
-        </Field>
-
-        <Field label="Email" name="email" error={errors.email}>
-          <input id="email" name="email" type="email" value={form.email} onChange={handleChange} placeholder="jane@example.com" className={inputClass} />
-        </Field>
-
-        {!isEditing && (
-          <Field label="Password" name="password" error={errors.password}>
-            <input id="password" name="password" type="password" value={form.password} onChange={handleChange} placeholder="At least 4 characters" className={inputClass} />
-          </Field>
-        )}
-
-        <Field label="Phone (WhatsApp)" name="phone" error={errors.phone} hint="Only shared after a match">
-          <input id="phone" name="phone" type="tel" value={form.phone} onChange={handleChange} placeholder="0712 345 678" className={inputClass} />
-        </Field>
-
-        <Field label="Location" name="location">
-          <input id="location" name="location" value={form.location} onChange={handleChange} placeholder="Nairobi" className={inputClass} />
-        </Field>
-
-        <Field label="Photo link (optional)" name="photo" hint="Leave empty and we'll pick one for you">
-          <input id="photo" name="photo" value={form.photo} onChange={handleChange} placeholder="https://..." className={inputClass} />
-        </Field>
-
-        <div className="md:col-span-2">
-          <Field label="Skills you can teach" name="offers" error={errors.offers} hint="Separate skills with commas">
-            <input id="offers" name="offers" value={form.offers} onChange={handleChange} placeholder="Baking, Guitar, React" className={inputClass} />
-          </Field>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {SKILLS.map((skill) => (
-              <button
-                key={skill}
-                type="button"
-                onClick={() => addSkill(skill)}
-                className="rounded-full bg-purple-50 px-3 py-1 text-xs font-medium text-purple-700 transition hover:bg-purple-100"
-              >
-                + {skill}
-              </button>
-            ))}
+    <main className="min-h-[calc(100vh-73px)] bg-[#f7f7f5] px-4 py-8 sm:py-12">
+      <section className="mx-auto max-w-2xl overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+        <div className="border-b border-gray-100 bg-[#17151f] px-6 py-7 text-white sm:px-10">
+          <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-100 text-xl font-bold text-purple-700">
+            S
           </div>
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-pink-300">
+            Join SkillSwap
+          </p>
+          <h1 className="mt-2 text-3xl font-black">
+            Create your profile
+          </h1>
+          <p className="mt-2 text-sm leading-6 text-white/70">
+            Tell the community a little about yourself and the skill you want to share.
+          </p>
         </div>
 
-        <div className="md:col-span-2">
-          <Field label="Skills you want to learn" name="wants" hint="Separate skills with commas">
-            <input id="wants" name="wants" value={form.wants} onChange={handleChange} placeholder="Photography, Swahili" className={inputClass} />
-          </Field>
-        </div>
+        <div className="px-6 py-7 sm:px-10 sm:py-8">
+          <form onSubmit={handleSubmit} noValidate className="space-y-5">
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label
+                  htmlFor="name"
+                  className="mb-1.5 block text-sm font-medium text-gray-700"
+                >
+                  Name
+                </label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  autoComplete="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  placeholder="Jane Doe"
+                  aria-invalid={!!errors.name}
+                  aria-describedby={errors.name ? 'name-error' : undefined}
+                  className={`w-full rounded-lg border px-3.5 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:ring-4 focus:ring-purple-100 ${
+                    errors.name
+                      ? 'border-red-300 focus:border-red-500'
+                      : 'border-gray-300 focus:border-purple-500'
+                  }`}
+                />
+                {errors.name && (
+                  <p id="name-error" className="mt-1 text-sm text-red-600">
+                    {errors.name}
+                  </p>
+                )}
+              </div>
 
-        <Field label="How long would it take to teach?" name="timeToLearn">
-          <input id="timeToLearn" name="timeToLearn" value={form.timeToLearn} onChange={handleChange} placeholder="2 weeks" className={inputClass} />
-        </Field>
+              <div>
+                <label
+                  htmlFor="location"
+                  className="mb-1.5 block text-sm font-medium text-gray-700"
+                >
+                  Location
+                </label>
+                <input
+                  id="location"
+                  name="location"
+                  type="text"
+                  autoComplete="address-level2"
+                  value={form.location}
+                  onChange={handleChange}
+                  placeholder="Nairobi"
+                  aria-invalid={!!errors.location}
+                  aria-describedby={errors.location ? 'location-error' : undefined}
+                  className={`w-full rounded-lg border px-3.5 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:ring-4 focus:ring-purple-100 ${
+                    errors.location
+                      ? 'border-red-300 focus:border-red-500'
+                      : 'border-gray-300 focus:border-purple-500'
+                  }`}
+                />
+                {errors.location && (
+                  <p id="location-error" className="mt-1 text-sm text-red-600">
+                    {errors.location}
+                  </p>
+                )}
+              </div>
+            </div>
 
-        <Field label="Short bio" name="bio">
-          <input id="bio" name="bio" value={form.bio} onChange={handleChange} placeholder="A line about you" className={inputClass} />
-        </Field>
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label
+                  htmlFor="phone"
+                  className="mb-1.5 block text-sm font-medium text-gray-700"
+                >
+                  Phone Number
+                </label>
+                <input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  autoComplete="tel"
+                  value={form.phone}
+                  onChange={handleChange}
+                  placeholder="+1 555 123 4567"
+                  aria-invalid={!!errors.phone}
+                  aria-describedby={errors.phone ? 'phone-error' : undefined}
+                  className={`w-full rounded-lg border px-3.5 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:ring-4 focus:ring-purple-100 ${
+                    errors.phone
+                      ? 'border-red-300 focus:border-red-500'
+                      : 'border-gray-300 focus:border-purple-500'
+                  }`}
+                />
+                {errors.phone && (
+                  <p id="phone-error" className="mt-1 text-sm text-red-600">
+                    {errors.phone}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="email"
+                  className="mb-1.5 block text-sm font-medium text-gray-700"
+                >
+                  Email
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  placeholder="jane@example.com"
+                  aria-invalid={!!errors.email}
+                  aria-describedby={errors.email ? 'email-error' : undefined}
+                  className={`w-full rounded-lg border px-3.5 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:ring-4 focus:ring-purple-100 ${
+                    errors.email
+                      ? 'border-red-300 focus:border-red-500'
+                      : 'border-gray-300 focus:border-purple-500'
+                  }`}
+                />
+                {errors.email && (
+                  <p id="email-error" className="mt-1 text-sm text-red-600">
+                    {errors.email}
+                  </p>
+                )}
+              </div>
+            </div>
 
-        <div className="md:col-span-2">
-          <button
-            type="submit"
-            disabled={saving}
-            className="w-full rounded-full bg-purple-600 py-3 font-semibold text-white shadow-md transition hover:bg-purple-700 active:scale-[0.99] disabled:opacity-60"
-          >
-            {saving ? 'Saving...' : isEditing ? 'Save changes' : 'Create my profile'}
-          </button>
-          {message && (
-            <p className="mt-4 rounded-xl bg-emerald-50 px-4 py-3 text-center text-sm text-emerald-700" role="status">
-              {message}
-            </p>
-          )}
-        </div>
-      </form>
+            <div>
+              <label
+                htmlFor="password"
+                className="mb-1.5 block text-sm font-medium text-gray-700"
+              >
+                Password
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="new-password"
+                value={form.password}
+                onChange={handleChange}
+                placeholder="At least 4 characters"
+                aria-invalid={!!errors.password}
+                aria-describedby={errors.password ? 'password-error' : undefined}
+                className={`w-full rounded-lg border px-3.5 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:ring-4 focus:ring-purple-100 ${
+                  errors.password
+                    ? 'border-red-300 focus:border-red-500'
+                    : 'border-gray-300 focus:border-purple-500'
+                }`}
+              />
+              {errors.password && (
+                <p id="password-error" className="mt-1 text-sm text-red-600">
+                  {errors.password}
+                </p>
+              )}
+            </div>
 
-      <section className="mt-10">
-        <h2 className="text-center text-lg font-bold text-gray-800">Your card</h2>
-        <p className="text-center text-sm text-gray-500">This is how others see you on Discover</p>
-        <div key={cardKey} className="animate-rise mx-auto mt-5 max-w-xs">
-          <SkillCard person={preview} onClick={() => {}} />
+            <div>
+              <label
+                htmlFor="skill"
+                className="mb-1.5 block text-sm font-medium text-gray-700"
+              >
+                Skill / Specialization
+              </label>
+              <select
+                id="skill"
+                name="skill"
+                value={form.skill}
+                onChange={handleChange}
+                aria-invalid={!!errors.skill}
+                aria-describedby={errors.skill ? 'skill-error' : undefined}
+                className={`w-full rounded-lg border bg-white px-3.5 py-3 text-gray-900 outline-none transition focus:ring-4 focus:ring-purple-100 ${
+                  errors.skill
+                    ? 'border-red-300 focus:border-red-500'
+                    : 'border-gray-300 focus:border-purple-500'
+                }`}
+              >
+                <option value="">-- Select a skill --</option>
+                {SKILLS.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
+              {errors.skill && (
+                <p id="skill-error" className="mt-1 text-sm text-red-600">
+                  {errors.skill}
+                </p>
+              )}
+            </div>
+
+            <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row">
+              <button
+                type="button"
+                onClick={handleReset}
+                className="rounded-lg border border-gray-300 px-4 py-3 font-medium text-gray-700 transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200"
+              >
+                Reset
+              </button>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="rounded-xl bg-gray-950 px-4 py-3 font-bold text-white shadow-sm transition hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 sm:flex-1"
+              >
+                {isSubmitting ? 'Saving profile...' : 'Create profile'}
+              </button>
+            </div>
+          </form>
+
+          {message && <p className="mt-5 rounded-xl bg-emerald-50 px-4 py-3 text-center text-sm font-medium text-emerald-700" role="status">{message}</p>}
+
+          <p className="mt-6 text-center text-sm text-gray-600">
+            Already have a profile?{' '}
+            <Link to="/login" className="font-semibold text-purple-700 hover:text-purple-800">
+              Sign in
+            </Link>
+          </p>
         </div>
       </section>
-
-      {isEditing && (
-        <div className="mt-10 text-center">
-          <button
-            type="button"
-            onClick={handleLogout}
-            className="rounded-full border border-pink-200 bg-white px-8 py-3 text-sm font-semibold text-pink-600 transition hover:bg-pink-50"
-          >
-            Log out
-          </button>
-        </div>
-      )}
     </main>
   );
 }
