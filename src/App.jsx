@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import CardsSection from "./components/CardsSection";
 import Matches from "./pages/Matches";
@@ -15,13 +15,14 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<CardsSection />} />
-          <Route path="/discover" element={<Navigate to="/" replace />} />
+          <Route path="/discover" element={<CardsSection />} />
           <Route path="/matches" element={<Matches />} />
           <Route path="/saved" element={<SavedMatches />} />
           <Route path="/skills" element={<SkillForm />} />
           <Route path="/signup" element={<SkillForm />} />
           <Route path="/login" element={<LoginForm />} />
           <Route path="/profile/:id" element={<Profile />} />
+          <Route path="/discover" element={<CardsSection />} />
         </Routes>
       </div>
     </BrowserRouter>
