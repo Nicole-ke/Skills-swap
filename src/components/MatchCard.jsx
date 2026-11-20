@@ -29,7 +29,7 @@ function MatchCard({
 
         <div className="min-w-0">
           <h2 className="text-lg font-bold text-gray-900">{name}</h2>
-          <p className="text-sm text-gray-500">📍 {location}</p>
+          <p className="text-sm text-gray-500"> {location}</p>
         </div>
 
         <div className="ml-auto text-center">
